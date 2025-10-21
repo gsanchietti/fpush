@@ -1,55 +1,5 @@
-// Demo HTTP server implementing a POST /fetch_messages endpoint
-// 
-// This server provides a minimal reference implementation for testing clients
-// that need to fetch messages via HTTP POST requests.
-//
-// ## Running the server:
-//
-// ```bash
-// cargo run --bin fpush-demopush
-// ```
-//
-// Or with custom bind address:
-//
-// ```bash
-// DEMO_BIND=0.0.0.0:8080 cargo run --bin fpush-demopush
-// ```
-//
-// Or pass bind address as command line argument:
-//
-// ```bash
-// cargo run --bin fpush-demopush -- 127.0.0.1:9090
-// ```
-//
-// ## Testing with curl:
-//
-// Successful request (with demo message):
-// ```bash
-// curl -X POST http://127.0.0.1:8080/fetch_messages \
-//   -H "Content-Type: application/json" \
-//   -d '{"username":"user","password":"pass","last_id":"","last_sent_id":"","device":"device1"}'
-// ```
-//
-// Request with existing last_id (no new messages):
-// ```bash
-// curl -X POST http://127.0.0.1:8080/fetch_messages \
-//   -H "Content-Type: application/json" \
-//   -d '{"username":"user","password":"pass","last_id":"123","last_sent_id":"456","device":"device1"}'
-// ```
-//
-// Invalid credentials (empty username):
-// ```bash
-// curl -X POST http://127.0.0.1:8080/fetch_messages \
-//   -H "Content-Type: application/json" \
-//   -d '{"username":"","password":"pass","last_id":"","last_sent_id":"","device":"device1"}'
-// ```
-//
-// Wrong Content-Type (415 error):
-// ```bash
-// curl -X POST http://127.0.0.1:8080/fetch_messages \
-//   -H "Content-Type: text/plain" \
-//   -d '{"username":"user","password":"pass","last_id":"","last_sent_id":"","device":"device1"}'
-// ```
+// HTTP server module for fpush
+// Provides a REST API with POST /fetch_messages endpoint for demo/testing purposes
 
 use actix_web::{middleware, web, App, HttpRequest, HttpResponse, HttpServer};
 use chrono::{DateTime, Utc};
@@ -201,27 +151,21 @@ async fn fetch_messages(
         sent_smss,
     };
 
-    log::info!("Returning {} received and {} sent messages", 
-               response.received_smss.len(), 
-               response.sent_smss.len());
+    log::info!(
+        "Returning {} received and {} sent messages",
+        response.received_smss.len(),
+        response.sent_smss.len()
+    );
 
     HttpResponse::Ok()
         .content_type("application/json")
         .json(response)
 }
 
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    // Initialize logger
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
-
-    // Determine bind address from command line arg, env var, or default
-    let bind_addr = env::args()
-        .nth(1)
-        .or_else(|| env::var("DEMO_BIND").ok())
-        .unwrap_or_else(|| "127.0.0.1:8080".to_string());
-
-    log::info!("Starting demo HTTP server on http://{}", bind_addr);
+/// Start HTTP server on the specified bind address
+/// This server provides a demo /fetch_messages endpoint for testing
+pub async fn start_http_server(bind_addr: String) -> std::io::Result<()> {
+    log::info!("Starting HTTP server on http://{}", bind_addr);
     log::info!("POST /fetch_messages endpoint is ready");
 
     HttpServer::new(|| {

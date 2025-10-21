@@ -1,6 +1,8 @@
 mod config;
 mod error;
 mod xmpp;
+mod http_server;
+
 use fpush_push::FpushPush;
 
 use log::{debug, error, info};
@@ -38,6 +40,15 @@ async fn main() {
 
     let push_impl: Arc<FpushPush> = Arc::new(FpushPush::new(settings.push_modules()).await);
 
+    // Start HTTP server in a separate task
+    let http_bind_addr = std::env::var("HTTP_BIND").unwrap_or_else(|_| "127.0.0.1:8080".to_string());
+    tokio::spawn(async move {
+        if let Err(e) = http_server::start_http_server(http_bind_addr).await {
+            error!("HTTP server error: {}", e);
+        }
+    });
+
+    // Main XMPP connection loop
     loop {
         info!(
             "Opening connection to {}",
