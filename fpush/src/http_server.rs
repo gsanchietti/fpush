@@ -1,5 +1,44 @@
 // HTTP server module for fpush
 // Provides a REST API with POST /fetch_messages endpoint for demo/testing purposes
+//
+// ## Configuration
+//
+// The HTTP server is started automatically when fpush runs. By default, it binds to
+// 127.0.0.1:8080. You can change the bind address using the HTTP_BIND environment variable:
+//
+// ```bash
+// HTTP_BIND=0.0.0.0:8080 ./fpush settings.json
+// ```
+//
+// ## Testing with curl
+//
+// Successful request (with demo messages):
+// ```bash
+// curl -X POST http://127.0.0.1:8080/fetch_messages \
+//   -H "Content-Type: application/json" \
+//   -d '{"username":"user","password":"pass","last_id":"","last_sent_id":"","device":"device1"}'
+// ```
+//
+// Request with existing last_id (no new messages):
+// ```bash
+// curl -X POST http://127.0.0.1:8080/fetch_messages \
+//   -H "Content-Type: application/json" \
+//   -d '{"username":"user","password":"pass","last_id":"123","last_sent_id":"456","device":"device1"}'
+// ```
+//
+// Invalid credentials (empty username - returns 401):
+// ```bash
+// curl -X POST http://127.0.0.1:8080/fetch_messages \
+//   -H "Content-Type: application/json" \
+//   -d '{"username":"","password":"pass","last_id":"","last_sent_id":"","device":"device1"}'
+// ```
+//
+// Wrong Content-Type (returns 415):
+// ```bash
+// curl -X POST http://127.0.0.1:8080/fetch_messages \
+//   -H "Content-Type: text/plain" \
+//   -d '{"username":"user","password":"pass","last_id":"","last_sent_id":"","device":"device1"}'
+// ```
 
 use actix_web::{middleware, web, App, HttpRequest, HttpResponse, HttpServer};
 use chrono::{DateTime, Utc};
