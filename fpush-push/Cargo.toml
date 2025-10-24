@@ -31,6 +31,7 @@ fpush-traits.workspace = true
 fpush-apns = { workspace = true, optional = true }
 fpush-fcm = { workspace = true, optional = true }
 fpush-demopush = { workspace = true, optional = true }
+fpush-acrobits = { workspace = true, optional = true }
 
 [features]
 random_delay_before_push = ["rand"]
@@ -38,5 +39,6 @@ random_delay_before_push = ["rand"]
 enable_fcm_support = ["fpush-fcm"]
 enable_apns_support = ["fpush-apns"]
 enable_demo_support = ["fpush-demopush"]
+enable_acrobits_support = ["fpush-acrobits"]
 
 default = ["enable_fcm_support", "enable_apns_support", "enable_demo_support"]

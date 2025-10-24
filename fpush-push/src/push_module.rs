@@ -19,6 +19,8 @@ pub enum PushModuleEnum {
     Google(PushModule<fpush_fcm::FpushFcm>),
     #[cfg(feature = "enable_demo_support")]
     Demo(PushModule<fpush_demopush::FpushDemoPush>),
+    #[cfg(feature = "enable_acrobits_support")]
+    Acrobits(PushModule<fpush_acrobits::FpushAcrobits>),
 }
 
 impl PushModuleEnum {
@@ -32,6 +34,8 @@ impl PushModuleEnum {
             PushModuleEnum::Google(push_module) => push_module.send(token).await,
             #[cfg(feature = "enable_demo_support")]
             PushModuleEnum::Demo(push_module) => push_module.send(token).await,
+            #[cfg(feature = "enable_acrobits_support")]
+            PushModuleEnum::Acrobits(push_module) => push_module.send(token).await,
         }
     }
 
@@ -44,6 +48,8 @@ impl PushModuleEnum {
             PushModuleEnum::Google(push_module) => push_module.blocklist(),
             #[cfg(feature = "enable_demo_support")]
             PushModuleEnum::Demo(push_module) => push_module.blocklist(),
+            #[cfg(feature = "enable_acrobits_support")]
+            PushModuleEnum::Acrobits(push_module) => push_module.blocklist(),
         }
     }
 
@@ -56,6 +62,8 @@ impl PushModuleEnum {
             PushModuleEnum::Google(push_module) => push_module.ratelimit(),
             #[cfg(feature = "enable_demo_support")]
             PushModuleEnum::Demo(push_module) => push_module.ratelimit(),
+            #[cfg(feature = "enable_acrobits_support")]
+            PushModuleEnum::Acrobits(push_module) => push_module.ratelimit(),
         }
     }
 
@@ -68,6 +76,8 @@ impl PushModuleEnum {
             PushModuleEnum::Google(push_module) => push_module.identifier(),
             #[cfg(feature = "enable_demo_support")]
             PushModuleEnum::Demo(push_module) => push_module.identifier(),
+            #[cfg(feature = "enable_acrobits_support")]
+            PushModuleEnum::Acrobits(push_module) => push_module.identifier(),
         }
     }
 }
@@ -131,6 +141,24 @@ impl PushModule<fpush_demopush::FpushDemoPush> {
             blocklist_config,
             ratelimit_config,
             Arc::new(demo_module),
+        )
+    }
+}
+
+#[cfg(feature = "enable_acrobits_support")]
+impl PushModule<fpush_acrobits::FpushAcrobits> {
+    pub(crate) fn new_acrobits_module(
+        identifier: String,
+        acrobits_conf: &fpush_acrobits::AcrobitsConfig,
+        blocklist_config: &BlacklistSettings,
+        ratelimit_config: &RatelimitSettings,
+    ) -> Result<PushModule<fpush_acrobits::FpushAcrobits>> {
+        let acrobits_push = fpush_acrobits::FpushAcrobits::init(acrobits_conf)?;
+        Self::new(
+            identifier,
+            blocklist_config,
+            ratelimit_config,
+            Arc::new(acrobits_push),
         )
     }
 }

@@ -263,6 +263,10 @@ Enable apple apns support for iOS, iPadOS and macOS devices.
 
 Enable a simple demo push endpoint used during development.
 
+##### enable_acrobits_support
+
+Enable Acrobits push support for Acrobits CloudPhone devices.
+
 ##### random_delay_before_push
 
 Improve ratelimit acurracy by waiting a random delay before handling each push message.

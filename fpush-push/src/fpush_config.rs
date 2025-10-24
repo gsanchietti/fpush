@@ -61,4 +61,14 @@ pub enum PushConfig {
         #[serde(default)]
         is_default_module: bool,
     },
+    #[cfg(feature = "enable_acrobits_support")]
+    Acrobits {
+        acrobits: fpush_acrobits::AcrobitsConfig,
+        #[serde(default)]
+        blacklist: BlacklistSettings,
+        #[serde(default)]
+        ratelimit: RatelimitSettings,
+        #[serde(default)]
+        is_default_module: bool,
+    },
 }

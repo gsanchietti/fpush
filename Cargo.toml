@@ -8,6 +8,7 @@ members = [
     "fpush-traits",
     "fpush-tokenblocker",
     "fpush-demopush",
+    "fpush-acrobits",
 ]
 
 resolver = "2"
@@ -58,6 +59,7 @@ fpush-traits = { path = "./fpush-traits" }
 fpush-apns = { path = "./fpush-apns" }
 fpush-fcm = { path = "./fpush-fcm" }
 fpush-demopush = { path = "./fpush-demopush" }
+fpush-acrobits = { path = "./fpush-acrobits" }
 fpush-push = { path = "./fpush-push" }
 
 [workspace.features]

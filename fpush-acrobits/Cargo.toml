@@ -1,0 +1,13 @@
+[package]
+name = "fpush-acrobits"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-trait = "0.1"
+fpush-traits = { path = "../fpush-traits" }
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+log = "0.4"
+reqwest = { version = "0.12", features = ["json"] }
+serde_json = "1.0"

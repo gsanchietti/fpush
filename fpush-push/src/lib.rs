@@ -91,6 +91,18 @@ impl FpushPush {
                     .unwrap();
                 (*is_default_module, PushModuleEnum::Demo(demo))
             }
+            #[cfg(feature = "enable_acrobits_support")]
+            PushConfig::Acrobits {
+                acrobits,
+                blacklist,
+                ratelimit,
+                is_default_module,
+            } => {
+                let acrobits_push_module =
+                    PushModule::new_acrobits_module(key.clone(), acrobits, blacklist, ratelimit)
+                        .unwrap();
+                (*is_default_module, PushModuleEnum::Acrobits(acrobits_push_module))
+            }
         }
     }
 
