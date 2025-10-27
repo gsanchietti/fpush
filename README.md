@@ -26,12 +26,29 @@
   * Google FCM
 * Multi app / platform support on a single XMPP domain/JID
 * Configurable token ratelimiting
+* HTTP REST API with POST /fetch_messages endpoint for demo/testing
 
 <a name="usage"></a>
 ## Usage
 
 ```
 ./fpush settings.json
+```
+
+The HTTP server is started automatically on `127.0.0.1:8080` by default. You can configure the bind address using the `HTTP_BIND` environment variable:
+
+```
+HTTP_BIND=0.0.0.0:8080 ./fpush settings.json
+```
+
+### HTTP API
+
+The HTTP server provides a POST `/fetch_messages` endpoint for demo/testing purposes:
+
+```bash
+curl -X POST http://127.0.0.1:8080/fetch_messages \
+  -H "Content-Type: application/json" \
+  -d '{"username":"user","password":"pass","last_id":"","last_sent_id":"","device":"device1"}'
 ```
 
 <a name="xmpp-api"></a>
